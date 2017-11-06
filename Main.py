@@ -66,6 +66,43 @@ def animate_rotate(deg):
         glFlush()
 
 
+def parse_task(input_parse):
+    keyword = input_parse[0]
+
+    global shape
+
+    if keyword == 'translate':
+        dx = float(input_parse[1])
+        dy = float(input_parse[2])
+        shape.translate(dx, dy)
+    elif keyword == 'dilate':
+        zoom = float(input_parse[1])
+        shape.dilate(zoom)
+    elif keyword == 'rotate':
+        deg = float(input_parse[1])
+        x = float(input_parse[2])
+        y = float(input_parse[3])
+        shape.rotate(deg, x, y)
+    elif keyword == 'reflect':
+        param = input_parse[1]
+        shape.reflect(param)
+    elif keyword == 'shear':
+        axis = input_parse[1]
+        coefficient = input_parse[2]
+        shape.shear(axis, float(coefficient))
+    elif keyword == 'stretch':
+        axis = input_parse[1]
+        coefficient = input_parse[2]
+        shape.stretch(axis, float(coefficient))
+    elif keyword == 'custom':
+        a = input_parse[1]
+        b = input_parse[2]
+        c = input_parse[3]
+        d = input_parse[4]
+        custom = [[float(a), float(b)], [float(c), float(d)]]
+        shape.custom(custom)
+
+
 def main_menu():
     print('Enter a task: ')
     input_parse = input().split()
@@ -75,45 +112,19 @@ def main_menu():
 
     if keyword == 'input':
         input_matrix()
-    elif keyword == 'translate':
-        dx = float(input_parse[1])
-        dy = float(input_parse[2])
-        shape.translate(dx, dy)
-        animate()
-    elif keyword == 'dilate':
-        zoom = float(input_parse[1])
-        shape.dilate(zoom)
-        animate()
-    elif keyword == 'rotate':
-        deg = float(input_parse[1])
-        x = float(input_parse[2])
-        y = float(input_parse[3])
-        shape.rotate(deg, x, y)
-        animate()
-    elif keyword == 'reflect':
-        param = input_parse[1]
-        shape.reflect(param)
-        animate()
-    elif keyword == 'shear':
-        axis = input_parse[1]
-        coefficient = input_parse[2]
-        shape.shear(axis, float(coefficient))
-        animate()
-    elif keyword == 'stretch':
-        axis = input_parse[1]
-        coefficient = input_parse[2]
-        shape.stretch(axis, float(coefficient))
-        animate()
-    elif keyword == 'custom':
-        a = input_parse[1]
-        b = input_parse[2]
-        c = input_parse[3]
-        d = input_parse[4]
-        custom = [[float(a), float(b)], [float(c), float(d)]]
-        shape.custom(custom)
-        animate()
     elif keyword == 'reset':
         shape.reset()
+        animate()
+    elif keyword == 'multiple':
+        n = int(input_parse[1])
+        for i in range(n):
+            multi_input = input().split()
+            parse_task(multi_input)
+        animate()
+    elif keyword == 'exit':
+        glutLeaveMainLoop()
+    else:
+        parse_task(input_parse)
         animate()
 
     glutPostRedisplay()
@@ -159,14 +170,12 @@ def draw_plane():
 
     glColor3f(144/255, 202/255, 249/255)
     glBegin(GL_POLYGON)
-    shape.print_point_old()
     for x in point_matrix_old:
         glVertex2f(x[0]/SCALE, x[1]/SCALE)
     glEnd()
 
     glColor3f(33/255, 150/255, 243/255)
     glBegin(GL_POLYGON)
-    shape.print_point()
     for x in point_matrix:
         glVertex2f(x[0]/SCALE, x[1]/SCALE)
     glEnd()
