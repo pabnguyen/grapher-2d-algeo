@@ -5,7 +5,6 @@ from OpenGL.GLUT import *
 import sys
 import time
 
-
 DEBUG = True
 
 shape = Shape()
@@ -14,11 +13,13 @@ FPS = 100
 RATE = 1
 
 
+# Specify the color and the dimension of the window
 def init():
     glClearColor(1.0, 1.0, 1.0, 0.0)
     gluOrtho2D(-1.0, 1.0, -1.0, 1.0)
 
 
+# Take a matrix of input and add it into Shape object
 def input_matrix():
     global shape
     print('Enter the number of point: ')
@@ -29,43 +30,46 @@ def input_matrix():
     glutDisplayFunc(draw_plane)
 
 
+# Animate the object, by using the point variable specified in Shape object
 def animate():
     for i in range(FPS):
         time.sleep(DELAY)
         global shape
         glClear(GL_COLOR_BUFFER_BIT)
         draw_graph()
-        glColor3f(33/255, 150/255, 243/255)
+        glColor3f(33 / 255, 150 / 255, 243 / 255)
         glBegin(GL_POLYGON)
         tmp = []
         for j in range(shape.num_of_point):
-            d_x = (shape.point_matrix[j][0] - shape.point_matrix_old[j][0])/100
-            d_y = (shape.point_matrix[j][1] - shape.point_matrix_old[j][1])/100
-            tmp.append([shape.point_matrix_old[j][0]+(i * d_x), shape.point_matrix_old[j][1]+(i * d_y)])
+            d_x = (shape.point_matrix[j][0] - shape.point_matrix_old[j][0]) / 100
+            d_y = (shape.point_matrix[j][1] - shape.point_matrix_old[j][1]) / 100
+            tmp.append([shape.point_matrix_old[j][0] + (i * d_x), shape.point_matrix_old[j][1] + (i * d_y)])
         for j in tmp:
-            glVertex2f(j[0]/500, j[1]/500)
+            glVertex2f(j[0] / 500, j[1] / 500)
         glEnd()
         glFlush()
 
 
+# Deprecated
 def animate_rotate(deg):
     for i in range(100):
         time.sleep(DELAY)
         glClear(GL_COLOR_BUFFER_BIT)
-        glColor3f(33/255, 150/255, 243/255)
+        glColor3f(33 / 255, 150 / 255, 243 / 255)
         glBegin(GL_POLYGON)
         deg /= 100
         tmp = []
         for j in range(shape.num_of_point):
-            d_x = (shape.point_matrix[j][0] - shape.point_matrix_old[j][0])/100
-            d_y = (shape.point_matrix[j][1] - shape.point_matrix_old[j][1])/100
-            tmp.append([shape.point_matrix_old[j][0]+(i*d_x), shape.point_matrix_old[j][1]+(i*d_y)])
+            d_x = (shape.point_matrix[j][0] - shape.point_matrix_old[j][0]) / 100
+            d_y = (shape.point_matrix[j][1] - shape.point_matrix_old[j][1]) / 100
+            tmp.append([shape.point_matrix_old[j][0] + (i * d_x), shape.point_matrix_old[j][1] + (i * d_y)])
         for j in tmp:
-            glVertex2f(j[0]/500, j[1]/500)
+            glVertex2f(j[0] / 500, j[1] / 500)
         glEnd()
         glFlush()
 
 
+# Parse the input that comes from main menu
 def parse_task(input_parse):
     keyword = input_parse[0]
 
@@ -103,6 +107,7 @@ def parse_task(input_parse):
         shape.custom(custom)
 
 
+# Initialize the main menu, take user input from command line
 def main_menu():
     print('Enter a task: ')
     input_parse = input().split()
@@ -130,19 +135,20 @@ def main_menu():
     glutPostRedisplay()
 
 
+# Draw each line on graph
 def draw_graph():
     global SCALE
-    glColor3f(206/255, 206/255, 206/255)
+    glColor3f(206 / 255, 206 / 255, 206 / 255)
     glLineWidth(0.01)
     glBegin(GL_LINES)
     for i in range(-int((SCALE / 20 + 1)), int(SCALE / 20)):
-        glVertex2f(i/int(SCALE / 20), 1.0)
-        glVertex2f(i/int(SCALE / 20), -1.0)
-        glVertex2f(1.0, i/int(SCALE / 20))
-        glVertex2f(-1.0, i/int(SCALE / 20))
+        glVertex2f(i / int(SCALE / 20), 1.0)
+        glVertex2f(i / int(SCALE / 20), -1.0)
+        glVertex2f(1.0, i / int(SCALE / 20))
+        glVertex2f(-1.0, i / int(SCALE / 20))
     glEnd()
 
-    glColor3f(130/255, 130/255, 130/255)
+    glColor3f(130 / 255, 130 / 255, 130 / 255)
     glLineWidth(2.0)
     glBegin(GL_LINES)
     glVertex2f(0.0, 1.0)
@@ -152,6 +158,7 @@ def draw_graph():
     glEnd()
 
 
+# Draw cartesian coordinate
 def cartesian():
     glClear(GL_COLOR_BUFFER_BIT)
     glColor3f(1.0, 1.0, 1.0)
@@ -159,6 +166,7 @@ def cartesian():
     glFlush()
 
 
+# Draw object
 def draw_plane():
     global shape, SCALE
 
@@ -168,27 +176,28 @@ def draw_plane():
     point_matrix = shape.get_point()
     point_matrix_old = shape.get_old_point()
 
-    glColor3f(144/255, 202/255, 249/255)
+    glColor3f(144 / 255, 202 / 255, 249 / 255)
     glBegin(GL_POLYGON)
     for x in point_matrix_old:
-        glVertex2f(x[0]/SCALE, x[1]/SCALE)
+        glVertex2f(x[0] / SCALE, x[1] / SCALE)
     glEnd()
 
-    glColor3f(33/255, 150/255, 243/255)
+    glColor3f(33 / 255, 150 / 255, 243 / 255)
     glBegin(GL_POLYGON)
     for x in point_matrix:
-        glVertex2f(x[0]/SCALE, x[1]/SCALE)
+        glVertex2f(x[0] / SCALE, x[1] / SCALE)
     glEnd()
 
     glFlush()
 
 
+# Initialize the window
 def main():
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
     glutInitWindowSize(500, 500)
     glutInitWindowPosition(50, 50)
-    glutCreateWindow('Ayy LMAO')
+    glutCreateWindow('Grapher 2D')
     glutDisplayFunc(draw_plane)
     glutIdleFunc(main_menu)
     init()
